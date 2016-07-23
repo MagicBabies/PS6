@@ -1,10 +1,18 @@
-%% 
-%Yedidya Moise
-n=(0:1:100)/100;
+% 1. Phosphorylation **********
+% Written by Yedidya Moise. Rechecked by Zehua Li.
+clear all
+
+dt=.01;
+n=0:dt:1;
 A=3.9;
 alpha=A*(1-n).*n;
 
+figure(1)
+clf
 plot(n,alpha,'b')
+
+% 2. Dephosphorylation **********
+% Written by Yedidya Moise. Rechecked by Zehua Li.
 
 B=.1;
 beta=n./(B+n);

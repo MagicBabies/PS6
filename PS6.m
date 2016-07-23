@@ -1,4 +1,12 @@
-% 1. Phosphorylation **********
+%% Problem Set 6: Learning and Memory
+% *Computer Modeling of the Brain 2016*
+% 
+% *Due July 26*
+% Zehua Li, Xihang Chen, Yedidya Moise, Sherry Shi 
+
+%% Section 1: Stable and Unstable Equilibrium 
+
+%1. Phosphorylation **********
 % Written by Yedidya Moise. Rechecked by Zehua Li.
 clear all
 
@@ -20,22 +28,37 @@ beta = n ./ (B + n);
 hold on
 plot(n, beta, 'r')
 
-%%
-dn = alpha - beta;
-plot(n, dn, 'c')
+title('Rate of phosphorylation and dephophorylation');
+legend('Alpha','Beta');
+xlabel('n (Percentage of subunits phosphorylated)');
+ylabel('Rate') ;
 
+% 3. Creating Stable States  **********
+dn = alpha - beta;
+figure(2)
+clf
+plot(n, dn, 'c')
+hold on 
 r=zeros(size(n));
 plot(n, r, 'm')
 
+title('Alpha-Beta as a Function of n');
+xlabel('n (Percentage of subunits phosphorylated)');
+ylabel('Alpha-Beta')
+
 %the equilibrium points are when n= 0, 0.2353, and 0.664
 
-%%
-clear all
 
+%% 4. Modeling Continuous Change
+clear all
+%Calculate the value of n overtime for 3 different initial values of n 
+%Choose values of n between the three equilibrium point
+
+%First initial value of n = .2
 dt = .01;
 t = 0:dt:10;
 n = zeros(size(t));
-n(1) = .23531;
+n(1) = .2;
 for i = 2:length(t)
     A = 3.9;
     alpha = A * (1 - n(i - 1)) * n(i - 1);
@@ -44,13 +67,50 @@ for i = 2:length(t)
     dn = (alpha - beta) * dt;
     n(i) = n(i - 1) + dn;
 end
-figure(2)
+figure(3)
+clf
+plot(t, n)
+%Second initial value of n = .4
+
+n(1) = .4;
+for i = 2:length(t)
+    A = 3.9;
+    alpha = A * (1 - n(i - 1)) * n(i - 1);
+    B = .1;
+    beta = n(i - 1) / (B + n(i - 1));
+    dn = (alpha - beta) * dt;
+    n(i) = n(i - 1) + dn;
+end
 hold on
 plot(t, n)
 
-% n goes to the two extreme equilibrium depending if it above or below the middle
-% equilibrium point. The stable equilibrium points are 0 and 0.664. The
-% unstable equilibrium point is 0.2353.
+%Third initial value of n = .8
+n(1) = .8;
+for i = 2:length(t)
+    A = 3.9;
+    alpha = A * (1 - n(i - 1)) * n(i - 1);
+    B = .1;
+    beta = n(i - 1) / (B + n(i - 1));
+    dn = (alpha - beta) * dt;
+    n(i) = n(i - 1) + dn;
+end
+
+hold on
+plot(t, n)
+legend('0.2','0.4','0.8');
+title('Value of n Over Time for 3 different n(1)');
+xlabel('Time');
+ylabel('n (Percentage of subunits phosphorylated)');
+
+% What happens to the value of n over time?
+%    Value of n(i) between the first two equilibrium points exponentially
+%      decays to the first equilibrium point, 0 
+%    Value of n(i) between the 2nd and 3rd equilibrium point and above the 
+%      last both stabilize at the third equilibrium point, .664
+
+% The stable equilibrium points are 0 and 0.664. 
+% The unstable equilibrium point is 0.2353.
+
 
 %% Section 2. Stochastic Models
 % 1. Stochastic Model **********

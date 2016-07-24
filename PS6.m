@@ -169,3 +169,45 @@ plot(t, n, 'b')
 hold all
 plot(t, p, 'r')
 %continue to increase until reach 100 subunits
+
+
+%%
+%Yedidya Moise
+dt=.01; maxt=10; t=0:dt:maxt; %setting up time
+
+n=zeros(size(t));
+subunits=12;
+m=zeros(1,subunits);
+
+for i=1:round(subunits/2)
+    m(i)=1
+end
+
+
+n(1)=sum(m)/subunits; %numbers that are ones divided by numbers that are zeros
+%so it is the initial proportions of subunits open
+  B=.1;
+  A=3.9;
+for nindex=2:length(t)
+    alpha=A*(1-n(nindex-1))*n(nindex-1);
+    beta=n(nindex-1)/(B+n(nindex-1));
+    
+    pclose=beta*dt; %probability of subunit closing
+    popen=alpha*dt; %probability of subunit opening (phosphorylation
+   
+    for mindex=1:subunits
+        if m(mindex)==1
+            if pclose>rand(1)
+            m(mindex)=0; %I close m(i)
+            end
+        else % If the subunit is already closed
+            if popen>rand(1);
+                m(mindex)=1; % I open it
+            end
+        end
+    end
+    n(nindex)=sum(m)/subunits;
+end
+figure(1)
+clf
+plot(t,n)

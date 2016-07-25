@@ -13,7 +13,7 @@ clear all
 dt = .01;
 n = 0:dt:1;
 A = 3.9;
-alpha = A * (1 - n) .* n;
+alpha = A * (1 - n).* n;
 
 figure(1)
 clf
@@ -50,6 +50,7 @@ ylabel('Alpha-Beta')
 
 
 %% 4. Modeling Continuous Change
+% Written by Yedidya Moise, Rechecked by Sherry Shi
 clear all
 %Calculate the value of n overtime for 3 different initial values of n 
 %Choose values of n between the three equilibrium point
@@ -165,7 +166,96 @@ for i = 2:length(t)
     end
 end
 figure(4)
+clf
 plot(t, n, 'b')
 hold all
 plot(t, p, 'r')
 %continue to increase until reach 100 subunits
+
+%% 2.4 
+dt=.01; maxt=1500; t=0:dt:maxt; %setting up time
+
+n=zeros(size(t));
+subunits=8;
+m=zeros(1,subunits); %all subunits dephosphorilated
+n(1)=sum(m)/subunits; %numbers that are ones divided by numbers that are zeros
+%so it is the initial proportions of subunits open
+ 
+B=.0000000001;
+A=5.3;
+s=.0005; %setting up the value for the new variable 
+ 
+  hi=zeros(size(n));
+  yo=zeros(size(n));
+for nindex=2:length(t)
+    alpha=A*(1-n(nindex-1))*(n(nindex-1)+s); %altered equation as given in the assignment
+    beta=n(nindex-1)/(B+n(nindex-1));
+    
+    pclose=beta*dt; %probability of subunit closing
+    popen=alpha*dt; %probability of subunit opening (phosphorylation
+   
+    for mindex=1:subunits
+        if m(mindex)==1
+            if pclose>rand(1)
+                m(mindex)=0; %I close m(i)
+            end
+        else % If the subunit is already closed
+            if popen>rand(1);
+                m(mindex)=1; % I open it
+            end
+        end
+    end
+    n(nindex)=sum(m)/subunits;
+    hi(nindex)=alpha;
+    yo(nindex)=beta;
+    
+end
+figure(1)
+clf
+plot(t,n)  
+
+
+%% 2.5) 
+dt=.01; maxt=1500; t=0:dt:maxt; %setting up time 
+
+n=zeros(size(t));
+subunits=100;
+m=zeros(1,subunits); %all subunits dephosphorilated
+n(1)=sum(m)/subunits; %numbers that are ones divided by numbers that are zeros
+%so it is the initial proportions of subunits open
+ 
+ B=.0000001;
+ A=4.9;
+ s=.0005; %setting up the value for the new variable 
+ 
+  hi=zeros(size(n));
+  yo=zeros(size(n));
+for nindex=2:length(t)
+    alpha=A*(1-n(nindex-1))*(n(nindex-1)+s); %altered equation as given in the assignment
+    beta=n(nindex-1)/(B+n(nindex-1));
+    
+    pclose=beta*dt; %probability of subunit closing
+    popen=alpha*dt; %probability of subunit opening (phosphorylation
+   
+    for mindex=1:subunits
+        if m(mindex)==1
+            if pclose>rand(1)
+                m(mindex)=0; %I close m(i)
+            end
+        else % If the subunit is already closed
+            if popen>rand(1);
+                m(mindex)=1; % I open it
+            end
+        end
+    end
+    n(nindex)=sum(m)/subunits;
+    hi(nindex)=alpha;
+    yo(nindex)=beta;
+    
+end
+figure(2)
+clf
+plot(t,n)  
+
+%The range of fluctuations remains between .3 and .7, very stable
+%There was no shift between UP and DOWN 

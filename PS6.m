@@ -308,15 +308,12 @@ for nindex=2:round(length(t)/2)
     popen=alpha*dt; %probability of subunit opening (phosphorylation
    
     for mindex=1:subunits
-        
         if m(mindex)==1
             if pclose>rand(1)
                 m(mindex)=0; %I close m(i)
             end
-        else % If the subunit is already closed
-            if popen>rand(1);
-                m(mindex)=1; % I open it
-            end
+        elseif popen>rand(1); % If the subunit is already closed
+            m(mindex)=1; % I open it
         end
     end
     n(nindex)=sum(m)/subunits;
@@ -335,10 +332,8 @@ for nindex=round((length(t)/2))+1:length(t)
             if pclose>rand(1)
                 m(mindex)=0; %I close m(i)
             end
-        else % If the subunit is already closed
-            if popen>rand(1);
-                m(mindex)=1; % I open it
-            end
+        elseif popen>rand(1); % If the subunit is already closed
+            m(mindex)=1; % I open it
         end
     end
     n(nindex)=sum(m)/subunits;
@@ -351,3 +346,47 @@ plot(t,n)
 %of time and has a relatively high percentage of phosphrylation for the
 %second part of time Via the frequent neuron stimulation, synapse between two neurons get stronger,which means the percentage of 
 %phosphorylation for now(second part of time) is higher than previous time(first part of time)
+
+%% Extra Credit 7: PP1 (Long term depression)
+dt=.01; maxt=1500; t=0:dt:maxt; %setting up time 
+
+subunits=100;
+m=ones(1,subunits); %all subunits dephosphorilated
+n=ones(1, length(t)); %numbers that are ones divided by numbers that are zeros
+% so it is the initial proportions of subunits open
+ 
+B=0.1;
+A=3;
+s=.0005; %setting up the value for the new variable 
+ 
+hi=zeros(size(n));
+yo=zeros(size(n));
+for nindex=2:length(n)
+    alpha=A*(1-n(nindex-1))*(n(nindex-1)+s); %altered equation as given in the assignment
+    beta=n(nindex-1)/(B+n(nindex-1));
+    
+    pclose=beta*dt; %probability of subunit closing
+    popen=alpha*dt; %probability of subunit opening (phosphorylation
+   
+    for mindex=1:subunits
+        if m(mindex)==1
+            if pclose>rand(1)
+                m(mindex)=0; %I close m(i)
+            end
+        else % If the subunit is already closed
+            if popen>rand(1);
+                m(mindex)=1; % I open it
+            end
+        end
+    end
+    n(nindex)=sum(m)/subunits;
+    hi(nindex)=alpha;
+    yo(nindex)=beta;
+    
+    if nindex > length(t) / 2
+        B=.001;
+    end
+end
+figure(2)
+clf
+plot(t, n, 'r')

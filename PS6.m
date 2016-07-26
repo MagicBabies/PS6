@@ -5,7 +5,7 @@
 % Zehua Li, Xihang Chen, Yedidya Moise, Sherry Shi 
 
 %% Section 1: Stable and Unstable Equilibrium 
-% 1) Phosphorylation 
+% 1) Phosphorylation ********** 
 % Written by Yedidya Moise rechecked by Zehua Li 
 
 n=(0:1:100)/100; %this sets up n to be a fraction of the subunits
@@ -14,9 +14,10 @@ A=3.9; %setting up variables according to the equations given in the assignment
 alpha=A*(1-n).*n; %setting up the equation
 
 figure(1)
+clf
 plot(n,alpha,'b')
 
-% 2) Desphosphorylation 
+% 2) Desphosphorylation ********** 
 % Written by Yedidya Moise rechecked by Zehua Li 
 
 B=.1; %setting up variables according to the equations given in the assignment
@@ -24,23 +25,29 @@ beta=n./(B+n); %setting up the equation
 
 hold on
 plot(n,beta,'r')
+title('Alpha and Beta as a function of n')
+xlabel('n')
+ylabel('Alpha and Beta')
 
-% 3) Creating Stable States 
+% 3) Creating Stable States ********** 
 % Written by Yedidya Moise 
 dn=alpha-beta; %setting up the change in n to be according to the equation in the assignment
 figure(2)
+clf
 plot(n,dn,'c')
 
 r=zeros(size(n)); %this creates a straight line, when dn intercepts with it
 %that is the equilibrium point
 hold on
 plot(n,r,'m')
+title('Stable States (points of intersection')
+xlabel('n');
+ylabel('alpha-beta');
 
 %the equilibrium points are when n= 0, 0.2353, and 0.664
 
-% 4) Modeling Continuous Change 
+% 4) Modeling Continuous Change ********** 
 clear all
-close all
 dt=.01; t=0:dt:100; %setting up time
 n=zeros(size(t)); %setting up a vector for the value of n at each point
 %n(1)=.23531; %starting n being equal to 
@@ -58,16 +65,17 @@ for i=2:length(t)
     %rate of change and dt
 end
 figure(3)
+clf
 hold on
 plot(t,n)
-
-%n goes to the two extreme stable equilibrium depending if it above or below the middle
+% VIEW FULL GRAPH IN ATTACHED DOCUMENT
+% n goes to the two extreme stable equilibrium depending if it above or below the middle
 % equilibrium point. The stable equilibrium points are 0 and 0.664. The
 % unstable equilibrium point is 0.2353.
 
 
 %% Section 2. Stochastic Models
-%2.1)
+% 1) Stochastic Model **********
 dt=.01; maxt=10; t=0:dt:maxt; %setting up time
 
 n=zeros(size(t)); %setting up the vector for the values of n
@@ -83,19 +91,19 @@ n(1)=sum(m)/subunits; %numbers that are ones divided by the number of subunits
 
   for i=1:round(subunits)/2 %starting out with the first half of subunits being
       %phosphorylated
-    m(i)=1
+    m(i)=1;
 end
 
   %setting up a for loop with the probabilities of subunits opening and
   %closing and with the equations for alpha and beta
-  
-  for nindex=2:length(t)
+
+for nindex=2:length(t)
     alpha=A*(1-n(nindex-1))*n(nindex-1);
     beta=n(nindex-1)/(B+n(nindex-1));
-    
+
     pclose=beta*dt; %probability of subunit closing as given in the assignment
     popen=alpha*dt; %probability of subunit opening (phosphorylation)
-   %setting up a for loop with each value of the subunits 
+    %setting up a for loop with each value of the subunits 
     for mindex=1:subunits
         if m(mindex)==1 %if that subunit is open(phosphorylated) then if the 
             %probabilty for closing it is high enough it will close
@@ -109,19 +117,22 @@ end
         end
     end
     n(nindex)=sum(m)/subunits;%sets up n(nindex) to be equal to numbers 
- %that are ones divided by the total number of subunits so it is the
- %proportions of subunits open
+    %that are ones divided by the total number of subunits so it is the
+    %proportions of subunits open
 end
-figure(1)
+figure(4)
 clf
 plot(t,n)
+title('Stochastic Model')
+xlabel('Time')
+ylabel('n') 
+% Tried with different starting points... 
 
 %over time the number of subunits phosphorylated goes up and down according
 %to the probabilities of individual subunits phosphorylating and
 %dephosphorylating.
 
-%%
-%2.2)
+% 2) Spontaneous decay **********
 dt=.01; maxt=500; t=0:dt:maxt; %setting up time
 
 n=zeros(size(t));
@@ -129,7 +140,7 @@ subunits=12;
 m=zeros(1,subunits);
 
 for i=1:round(subunits) %starting out with all of the subunits being dephosphorylated
-    m(i)=1
+    m(i)=1;
 end
 
 
@@ -157,12 +168,14 @@ for nindex=2:length(t)
     end
     n(nindex)=sum(m)/subunits;
 end
-figure(1)
+figure(5)
 clf
 plot(t,n)
+title('Spontaneous Dephosphorylation') 
+xlabel('Time')
+ylabel('n') 
 
-%%
-%%PS6 s2 problem 3
+% 3) Spontaneous Phosphorylation **********
 dt=.01; maxt=1000; t=0:dt:maxt; %setting up time
 
 n=zeros(size(t));
@@ -193,12 +206,15 @@ for nindex=2:length(t)
     end
     n(nindex)=sum(m)/subunits;
 end
-figure(1)
+figure(6)
 clf
 plot(t,n)
+title('Spontaneous Phosphorylation') 
+xlabel('Time')
+ylabel('n') 
 %figure that shows that this s works is figurePS6section2part3
 
-%% 2.4 
+% 4) Spontaneous Flipping **********
 dt=.01; maxt=2000; t=0:dt:maxt; %setting up time
 
 n=zeros(size(t));
@@ -236,13 +252,14 @@ for nindex=2:length(t)
     yo(nindex)=beta;
     
 end
-figure(1)
+figure(7)
 clf
 plot(t,n)  
+title('UP and DOWN Shift')
+xlabel('Time')
+ylabel('n') 
 
-
-%%
-%2.5) 
+% 5) Efect of number of enzymes on Stability **********
 dt=.01; maxt=1500; t=0:dt:maxt; %setting up time 
 
 n=zeros(size(t));
@@ -252,7 +269,7 @@ n(1)=sum(m)/subunits; %numbers that are ones divided by numbers that are zeros
 %so it is the initial proportions of subunits open
  
  B=.0000001;
- A=4.9;
+ A=6.3;
  s=.0005; %setting up the value for the new variable 
  
   hi=zeros(size(n));
@@ -280,15 +297,18 @@ for nindex=2:length(t)
     yo(nindex)=beta;
     
 end
-figure(2)
+figure(8)
 clf
-plot(t,n)  
+plot(t,n)
+title('Stable number of subunits')
+xlabel('Time')
+ylabel('n') 
 
-%The range of fluctuations remains between .3 and .7, very stable
+%The range of fluctuations remains around .4, very stable
 %There was no shift between UP and DOWN 
 
-%% Extra Credit 6: Calcium Influx (Long term potentiation))
-%created by Xinhang Chen
+% Extra Credit 6) Calcium Influx (Long term potentiation)) **********
+% Written by Xinhang Chen
 dt=.01; maxt=1000; t=0:dt:maxt; %setting up time
 
 n=zeros(size(t));
@@ -338,55 +358,62 @@ for nindex=round((length(t)/2))+1:length(t)
     end
     n(nindex)=sum(m)/subunits;
 end
-figure(1)
+figure(9)
 clf
 plot(t,n)
+title('Calcium Influx: Longterm potentiation')
+xlabel('Time')
+ylabel('n')
 %figure that shows that this works is Extra Credit 1
 %Its has a relatively low percentage of phosphorylation for the first part
 %of time and has a relatively high percentage of phosphrylation for the
 %second part of time Via the frequent neuron stimulation, synapse between two neurons get stronger,which means the percentage of 
 %phosphorylation for now(second part of time) is higher than previous time(first part of time)
 
-%% Extra Credit 7: PP1 (Long term depression)
-dt=.01; maxt=1500; t=0:dt:maxt; %setting up time 
+% Extra Credit 7: PP1 (Long term depression) **********
+% Written by Zehua Li.
+% The percentage of phosphorylated subunits has a sudden decrease when B changes.
+% The B, I guess, is related to the strength of synapse. When B gets
+% smaller, the synapse becomes weaker and there's more possibility for a
+% subunit to dephosphorylate, so that it's much more difficult to cause a
+% spike, which is just as the long term depression.
 
-subunits=100;
-m=ones(1,subunits); %all subunits dephosphorilated
-n=ones(1, length(t)); %numbers that are ones divided by numbers that are zeros
+dt = .01; maxt = 1000; t = 0:dt:maxt; % setting up time
+
+subunits = 100;
+m = ones(1, subunits); %all subunits dephosphorilated
+n = ones(1, length(t)); %numbers that are ones divided by numbers that are zeros
 % so it is the initial proportions of subunits open
  
-B=0.1;
-A=3;
-s=.0005; %setting up the value for the new variable 
+B = 0.1;
+A = 3;
+s = .0005; %setting up the value for the new variable 
  
-hi=zeros(size(n));
-yo=zeros(size(n));
-for nindex=2:length(n)
-    alpha=A*(1-n(nindex-1))*(n(nindex-1)+s); %altered equation as given in the assignment
-    beta=n(nindex-1)/(B+n(nindex-1));
+for nindex = 2:length(n)
+    alpha = A * (1 - n(nindex - 1)) * (n(nindex - 1) + s); %altered equation as given in the assignment
+    beta = n(nindex - 1) / (B + n(nindex - 1));
     
-    pclose=beta*dt; %probability of subunit closing
-    popen=alpha*dt; %probability of subunit opening (phosphorylation
+    pclose = beta * dt; %probability of subunit closing
+    popen = alpha * dt; %probability of subunit opening (phosphorylation
    
-    for mindex=1:subunits
-        if m(mindex)==1
-            if pclose>rand(1)
-                m(mindex)=0; %I close m(i)
+    for mindex = 1:subunits
+        if m(mindex) == 1
+            if pclose > rand(1)
+                m(mindex) = 0; %I close m(i)
             end
-        else % If the subunit is already closed
-            if popen>rand(1);
-                m(mindex)=1; % I open it
-            end
+        elseif popen>rand(1); % If the subunit is already closed
+            m(mindex) = 1; % I open it
         end
     end
-    n(nindex)=sum(m)/subunits;
-    hi(nindex)=alpha;
-    yo(nindex)=beta;
+    n(nindex) = sum(m) / subunits; % Calculate the n at the specific time point.
     
-    if nindex > length(t) / 2
-        B=.001;
+    if nindex > length(t) / 2 % During the second half of t, there'll be only one equilibrium point.
+        B = .001;
     end
 end
-figure(2)
+figure(10)
 clf
 plot(t, n, 'r')
+title('Long Term Depression')
+xlabel('Time')
+ylabel('n')
